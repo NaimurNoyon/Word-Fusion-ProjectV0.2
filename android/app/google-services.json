@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "222235656274",
+    "project_id": "word-puzzle-v2",
+    "storage_bucket": "word-puzzle-v2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222235656274:android:21458fb7fbfde0aecddf8b",
+        "android_client_info": {
+          "package_name": "com.naimurnoyon.word_fusion.word_fusion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDk1D83ipbtF8v4OYB77r9Lb8dkOlWQ9MI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
