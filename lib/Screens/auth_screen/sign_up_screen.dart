@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_picker/country_picker.dart';
+import 'package:country_pickers/country.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:word_fusion/Screens/home_screen.dart';
 
 import '../../Constants/colors.dart';
 
@@ -24,6 +27,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final FirebaseAuth _fireStore = FirebaseAuth.instance;
 
+  String? selectedCountry;
+  List<String> countryList = ['Country 1', 'Country 2', 'Country 3']; // Add your actual country names here
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Form(
         key: _formField,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "Sign Up",
@@ -47,148 +55,179 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 color: AppColors.colorBlack,
               ),
             ),
-            TextFormField(
-
-              cursorColor: AppColors.colorSecondary,
-              keyboardType: TextInputType.emailAddress,
-              controller: emailController, // sets the controller for the text input field
-              style: const TextStyle(
-                  color: AppColors.colorBlack,
-              ), // sets the text style for the text input field
-              decoration: InputDecoration(
-                hintText: 'Email', // sets the hint text for the text input field
-                hintStyle: const TextStyle(
+            nameTextFormField(),
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: TextFormField(
+                cursorColor: AppColors.colorSecondary,
+                keyboardType: TextInputType.emailAddress,
+                controller: passwordController, // sets the controller for the text input field
+                style: const TextStyle(
+                  color: AppColors.colorSecondary,
+                  fontWeight: FontWeight.bold,
+                ), // sets the text style for the text input field
+                decoration: InputDecoration(
+                  hintText: 'Password', // sets the hint text for the text input field
+                  hintStyle: const TextStyle(
                     color: AppColors.colorDisable,
-                ),
-                fillColor: ,// sets the hint text style for the text input field
-                prefixIcon: const Icon(
-                  Icons.email_outlined,
-                  color: AppColors.colorBlack,
-                ), // sets the prefix icon for the text input field
-                contentPadding: const EdgeInsets.fromLTRB(0, -10, 0, -10), // sets the padding for the text input field content
-                enabledBorder: OutlineInputBorder(
-                  // sets the border for the enabled state of the text input field
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(
-                    color: AppColors.colorWhite,
-                    width: 1,
                   ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  // sets the border for the focused state of the text input field
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(
+                  filled: true,
+                  fillColor: AppColors.colorWhite,// sets the hint text style for the text input field
+                  prefixIcon: const Icon(
+                    Icons.password_outlined,
                     color: AppColors.colorSecondary,
-                    width: 1,
+                  ), // sets the prefix icon for the text input field
+                  contentPadding: const EdgeInsets.fromLTRB(0, -0, 0, -0), // sets the padding for the text input field content
+                  enabledBorder: OutlineInputBorder(
+                    // sets the border for the enabled state of the text input field
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorSecondary,
+                      width: 1,
+                    ),
                   ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  // sets the border for the error state of the text input field
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: AppColors.colorPrimary,
-                    width: 1,
+                  focusedBorder: OutlineInputBorder(
+                    // sets the border for the focused state of the text input field
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorSecondary,
+                      width: 1,
+                    ),
                   ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  // sets the border for the focused error state of the text input field
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: AppColors.colorPrimary,
-                    width: 1,
+                  errorBorder: OutlineInputBorder(
+                    // sets the border for the error state of the text input field
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorPrimary,
+                      width: 1,
+                    ),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    // sets the border for the focused error state of the text input field
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorPrimary,
+                      width: 1,
+                    ),
                   ),
                 ),
               ),
             ),
             SizedBox(height: 10.h),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors
-                      .colorPrimary, // sets the background color of the container
-                  borderRadius: BorderRadius.circular(
-                      8), // sets the border radius of the container
-                ),
-                width: 308.w, // sets the width of the container
-                child: TextFormField(
-                  cursorColor: AppColors.colorSecondary,
-                  //obscureText: obscureText,
-                  // Assign a controller to the text field for reading the entered text
-                  controller: passwordController,
-                  // Add validation for the entered text
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Enter Password";
-                    } else if (passwordController.text.length < 6) {
-                      return "Password length should be more than 6 characters";
-                    }
-                  },
-                  style: const TextStyle(
-                      color: AppColors
-                          .colorWhite), // sets the text style for the text input field
-                  decoration: InputDecoration(
-                    hintText:
-                    'Password', // sets the hint text for the text input field
-                    hintStyle: const TextStyle(
-                        color: AppColors
-                            .colorPrimary), // sets the hint text style for the text input field
-                    prefixIcon: const Icon(
-                      Icons.lock_rounded,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: TextFormField(
+                cursorColor: AppColors.colorSecondary,
+                keyboardType: TextInputType.emailAddress,
+                controller: passwordController, // sets the controller for the text input field
+                style: const TextStyle(
+                  color: AppColors.colorSecondary,
+                  fontWeight: FontWeight.bold,
+                ), // sets the text style for the text input field
+                decoration: InputDecoration(
+                  hintText: 'Password', // sets the hint text for the text input field
+                  hintStyle: const TextStyle(
+                    color: AppColors.colorDisable,
+                  ),
+                  filled: true,
+                  fillColor: AppColors.colorWhite,// sets the hint text style for the text input field
+                  prefixIcon: const Icon(
+                    Icons.password_outlined,
+                    color: AppColors.colorSecondary,
+                  ), // sets the prefix icon for the text input field
+                  contentPadding: const EdgeInsets.fromLTRB(0, -0, 0, -0), // sets the padding for the text input field content
+                  enabledBorder: OutlineInputBorder(
+                    // sets the border for the enabled state of the text input field
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorSecondary,
+                      width: 1,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // sets the border for the focused state of the text input field
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorSecondary,
+                      width: 1,
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    // sets the border for the error state of the text input field
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
                       color: AppColors.colorPrimary,
+                      width: 1,
                     ),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        // When the visibility toggle icon is tapped, toggle the value of obscureText
-                        /*setState(() {
-                          obscureText = !obscureText;
-                        });*/
-                      },
-                      child: /*obscureText
-                          ? */const Icon(Icons.visibility_off,
-                          color: AppColors.colorPrimary, size: 20)
-                          /*: const Icon(Icons.visibility,
-                          color: AppColors.colorSecondary,
-                          size: 20)*/,
-                    ), // sets the prefix icon for the text input field
-                    contentPadding: const EdgeInsets.fromLTRB(
-                        10,
-                        16,
-                        -16,
-                        16), // sets the padding for the text input field content
-                    enabledBorder: OutlineInputBorder(
-                      // sets the border for the enabled state of the text input field
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        color: AppColors.colorPrimary,
-                        width: 1,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      // sets the border for the focused state of the text input field
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        color: AppColors.colorSecondary,
-                        width: 1,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      // sets the border for the error state of the text input field
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        color: AppColors.colorPrimary,
-                        width: 1,
-                      ),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      // sets the border for the focused error state of the text input field
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        color: AppColors.colorPrimary,
-                        width: 1,
-                      ),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    // sets the border for the focused error state of the text input field
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorPrimary,
+                      width: 1,
                     ),
                   ),
                 ),
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: DropdownButtonFormField<String>(
+                value: selectedCountry,
+                onChanged: (String? newValue) {
+                  // Handle country selection
+                  // You can update the state or perform any other actions here
+                  setState(() {
+                    selectedCountry = newValue!;
+                  });
+                },
+                hint: Text('Select your country'),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.colorWhite,
+                  prefixIcon: const Icon(
+                    Icons.flag,
+                    color: AppColors.colorSecondary,
+                  ),
+                  contentPadding: const EdgeInsets.fromLTRB(0, -0, 16, -0), // sets the padding for the text input field content
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorSecondary,
+                      width: 1,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorSecondary,
+                      width: 1,
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorPrimary,
+                      width: 1,
+                    ),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: AppColors.colorPrimary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                items: countryList.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
             ),
             SizedBox(height: 10.h),
@@ -198,6 +237,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: ElevatedButton(
                   onPressed: () async {
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                     /*// Create the user in Firebase Authentication
                     UserCredential userCredential =
                         await _fireStore.createUserWithEmailAndPassword(
@@ -243,6 +283,67 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget nameTextFormField(){
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: TextFormField(
+        cursorColor: AppColors.colorSecondary,
+        keyboardType: TextInputType.emailAddress,
+        controller: emailController, // sets the controller for the text input field
+        style: const TextStyle(
+          color: AppColors.colorSecondary,
+          fontWeight: FontWeight.bold,
+        ), // sets the text style for the text input field
+        decoration: InputDecoration(
+          hintText: 'Email', // sets the hint text for the text input field
+          hintStyle: const TextStyle(
+            color: AppColors.colorDisable,
+          ),
+          filled: true,
+          fillColor: AppColors.colorWhite,
+          prefixIcon: const Icon(
+            Icons.email_outlined,
+            color: AppColors.colorSecondary,
+          ), // sets the prefix icon for the text input field
+          contentPadding: const EdgeInsets.fromLTRB(0, -0, 0, -0), // sets the padding for the text input field content
+          enabledBorder: OutlineInputBorder(
+            // sets the border for the enabled state of the text input field
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(
+              color: AppColors.colorSecondary,
+              width: 1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            // sets the border for the focused state of the text input field
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(
+              color: AppColors.colorSecondary,
+              width: 1,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            // sets the border for the error state of the text input field
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              color: AppColors.colorPrimary,
+              width: 1,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            // sets the border for the focused error state of the text input field
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              color: AppColors.colorPrimary,
+              width: 1,
+            ),
+          ),
         ),
       ),
     );
