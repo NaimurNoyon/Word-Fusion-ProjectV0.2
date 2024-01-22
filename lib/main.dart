@@ -36,8 +36,9 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'Word Fusion',
               theme: ThemeData(
+                fontFamily: "Poppins",
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true,
+                useMaterial3: false,
               ),
               home: const SignUpScreen());
         });

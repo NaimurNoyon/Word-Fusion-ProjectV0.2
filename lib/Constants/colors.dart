@@ -7,6 +7,7 @@ class AppColors{
 
   static const colorWhite = Color(0xffffffff);
   static const colorBlack = Color(0xff000000);
+  static const colorBlackLight = Color(0xff343434);
 
   static const colorDisable = Color(0xff808080);
 }
