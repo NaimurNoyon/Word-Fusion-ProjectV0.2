@@ -44,6 +44,7 @@ dependencies:
   provider:
   country_pickers:
   country_picker:
+  country_flags: ^2.2.0
 
 dev_dependencies:
   flutter_test:

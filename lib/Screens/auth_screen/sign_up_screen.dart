@@ -31,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final FirebaseAuth _fireStore = FirebaseAuth.instance;
 
-  String? selectedCountry;
+  //String? selectedCountry;
 
   @override
   Widget build(BuildContext context) {
@@ -373,21 +373,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Map<String, dynamic>? selectedCountry;
+
   Widget countryDropdownWidget() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: DropdownButtonFormField<String>(
+      child: DropdownButtonFormField<Map<String, dynamic>>(
         value: selectedCountry,
-        onChanged: (String? newValue) {
-          // You can update the state or perform any other actions here
+        onChanged: (Map<String, dynamic>? newValue) {
           setState(() {
-            selectedCountry = newValue!;
+            selectedCountry = newValue;
+            if (newValue != null) {
+              print("Selected Country: ${newValue['fullName']}, Country Code: ${newValue['countryCode']}");
+            }
           });
         },
         hint: const Text(
           'Select your country',
           style: TextStyle(
-              fontWeight: FontWeight.w500, color: AppColors.colorDisable),
+            fontWeight: FontWeight.w500,
+            color: AppColors.colorDisable,
+          ),
         ),
         decoration: InputDecoration(
           filled: true,
@@ -427,13 +433,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
-        items: countryList.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
+        items: countryList.map<DropdownMenuItem<Map<String, dynamic>>>(
+              (Map<String, dynamic> value) {
+            return DropdownMenuItem<Map<String, dynamic>>(
+              value: value,
+              child: Text(
+                  value["fullName"],
+                style: TextStyle(
+                  fontSize: 14.sp
+                ),
+              ),
+            );
+          },
+        ).toList(),
       ),
     );
   }
+
+
+
 }

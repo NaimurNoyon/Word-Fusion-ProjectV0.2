@@ -74,7 +74,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(height: 20.h),
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                    Navigator.push(context, CustomPageRouteRightToLeft(builder: (context) => HomeScreen()));
                   },
                   child: Container(
                     height: 50.h,

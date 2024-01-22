@@ -6,6 +6,7 @@ import 'package:word_fusion/Providers/user_provider.dart';
 import 'package:word_fusion/Screens/home_screen.dart';
 
 import 'Screens/auth_screen/sign_up_screen.dart';
+import 'Screens/demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
