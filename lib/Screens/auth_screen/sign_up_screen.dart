@@ -80,8 +80,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 countryDropdownWidget(),
                 SizedBox(height: 20.h),
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                  onTap: () async{
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                    // Create the user in Firebase Authentication
+                    UserCredential userCredential =
+                        await _fireStore.createUserWithEmailAndPassword(
+                      email: emailController.text.toString(),
+                      password: passwordController.text.toString(),
+                    );
+
+                    // Get the user's UID
+                    String uid = userCredential.user!.uid;
+
+                    // Check if a document with the user's UID already exists
+                    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(uid)
+                        .get();
+
+                    if (userDoc.exists) {
+                      print('User document already exists!');
+                    } else {
+                      // Create a new document in Firestore with the user's UID
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(uid)
+                          .set({
+                        'uid': uid,
+                        'email': emailController.text.toString(),
+                        'userName': userNameController.text.toString(),
+                        'photoUrl': '',
+                        'country': selectedCountry!['fullName'],
+                        'countryCode':selectedCountry!['countryCode'],
+                      });
+                      print('User document created successfully!');
+                    }
+
+                    setState(() {
+                      loading = false;
+                    });
+
+                    print('User created successfully!');
                   },
                   child: Container(
                     height: 50.h,
@@ -193,9 +232,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         cursorColor: AppColors.colorSecondary,
         keyboardType: TextInputType.emailAddress,
         controller: userNameController, // sets the controller for the text input field
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.colorBlackLight,
           fontWeight: FontWeight.w500,
+          fontSize: 14.sp
         ), // sets the text style for the text input field
         decoration: InputDecoration(
           hintText: 'Username', // sets the hint text for the text input field
@@ -318,9 +358,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         cursorColor: AppColors.colorSecondary,
         keyboardType: TextInputType.emailAddress,
         controller: passwordController, // sets the controller for the text input field
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.colorBlackLight,
           fontWeight: FontWeight.w500,
+          fontSize: 14.sp,
         ), // sets the text style for the text input field
         decoration: InputDecoration(
           hintText: 'Password', // sets the hint text for the text input field
