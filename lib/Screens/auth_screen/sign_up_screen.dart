@@ -112,7 +112,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         'photoUrl': '',
                         'country': selectedCountry!['fullName'],
                         'countryCode':selectedCountry!['countryCode'],
+                        'bestScore': 0,
                       });
+
+                      await FirebaseFirestore.instance
+                          .collection('rank')
+                          .doc("$uid-00")
+                          .set({
+
+                      });
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+
                       print('User document created successfully!');
                     }
 
@@ -166,7 +177,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: 100.h),
                 /*Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ElevatedButton(

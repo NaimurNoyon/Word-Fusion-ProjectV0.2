@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,12 +14,19 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isDark = false;
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
+    isDark?
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+    )) :
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+    ));
     return Scaffold(
       body: Stack(
         children: [
@@ -48,27 +56,65 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 150,
-                  width: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color:isDark? Colors.white.withOpacity(0.5) : Colors.black.withOpacity(0.5),
+          Positioned(
+            top: 100.h,
+            left: 0.0,
+            right: 0.0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 200.h,
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: isDark
+                          ? Colors.white.withOpacity(0.5)
+                          : Colors.black.withOpacity(0.5),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Current Rank",
+                          style: TextStyle(
+                              color: isDark ? Colors.black : Colors.white),
+                        ),
+                        Text(
+                          "1",
+                          style: TextStyle(
+                              fontSize: 50,
+                              color: isDark ? Colors.black : Colors.white),
+                        )
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Current Rank", style: TextStyle(color: isDark? Colors.black : Colors.white),),
-                      Text("1",style: TextStyle(fontSize: 50, color: isDark? Colors.black : Colors.white),)
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 300)
-              ],
+                  SizedBox(
+                    height: 300.h,
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of items horizontally
+                        crossAxisSpacing: 16.0, // Spacing between items horizontally
+                        mainAxisSpacing: 16.0, // Spacing between items vertically
+                        childAspectRatio: 12/9,
+                      ),
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: isDark
+                                ? Colors.white.withOpacity(0.5)
+                                : Colors.black.withOpacity(0.5),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],
